@@ -10,72 +10,117 @@ import javax.swing.table.*;
 
 public class calendarmod extends JFrame {
 
-	// private JPanel contentPane;
-
-	DefaultTableModel model;
-	Calendar cal = new GregorianCalendar(); // importing java swing calendar instance
-	JLabel label;
+	DefaultTableModel model; // week label
+	Calendar cal = new GregorianCalendar(); // calendar resource
+	JLabel tbanner; // title
 
 	calendarmod() {
 
 		// creating the window
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Your Personal Health Tracker");
-		this.setSize(1000, 700);
+		this.setSize(500, 300);
 		this.setLayout(new BorderLayout());
 		this.setVisible(true);
 
-		label = new JLabel();
-		label.setHorizontalAlignment(SwingConstants.CENTER);
+		// month one the calendar display
+		tbanner = new JLabel();
+		tbanner.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JButton b1 = new JButton("<-");
-		b1.addActionListener(new ActionListener() {
+		// go one month before
+		JButton backmonth = new JButton("<-");
+		backmonth.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				cal.add(Calendar.MONTH, -1);
 				updateMonth();
 			}
 		});
 
-		JButton b2 = new JButton("->");
-		b2.addActionListener(new ActionListener() {
+		// go one month after
+		JButton forwardmonth = new JButton("->");
+		forwardmonth.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				cal.add(Calendar.MONTH, +1);
 				updateMonth();
 			}
 		});
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		panel.add(b1, BorderLayout.WEST);
-		panel.add(label, BorderLayout.CENTER);
-		panel.add(b2, BorderLayout.EAST);
+		// canvas
+		JPanel yrmoninfo = new JPanel();
+		yrmoninfo.setLayout(new BorderLayout());
+		yrmoninfo.add(backmonth, BorderLayout.WEST);
+		yrmoninfo.add(tbanner, BorderLayout.CENTER);
+		yrmoninfo.add(forwardmonth, BorderLayout.EAST);
 
+		// labels for week time
 		String[] columns = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 		model = new DefaultTableModel(null, columns);
 		JTable table = new JTable(model);
-		JScrollPane pane = new JScrollPane(table);
+		JScrollPane datespane = new JScrollPane(table);
 
-		this.add(panel, BorderLayout.NORTH);
-		this.add(pane, BorderLayout.CENTER);
+		///////////////////////////////
+		// creating operational buttons
+		///////////////////////////////
+
+		// lead to page inputting new data
+		JButton newinfo = new JButton("New Data");
+		newinfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				// trigger adding data window
+			}
+		});
+
+		// year long data
+		JButton yrdata = new JButton("Year Long Data");
+		yrdata.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				// display data for the entire year
+			}
+		});
+
+		// show selected week
+		JButton weekdata = new JButton("Show Selected Week");
+		weekdata.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				// show the activity data for the entire week
+			}
+		});
+
+		// creating a pane for all the data
+		JPanel opbnts = new JPanel();
+		opbnts.setLayout(new BorderLayout());
+		opbnts.add(newinfo, BorderLayout.WEST);
+		opbnts.add(yrdata, BorderLayout.CENTER);
+		opbnts.add(weekdata, BorderLayout.EAST);
+
+		this.add(yrmoninfo, BorderLayout.NORTH);
+		this.add(datespane, BorderLayout.CENTER);
+		this.add(opbnts, BorderLayout.SOUTH);
 
 		this.updateMonth();
 
 	}
 
+	// initiating the calendar
 	void updateMonth() {
+
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 
+		// top banner for month & year
 		String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
 		int year = cal.get(Calendar.YEAR);
 		label.setText(month + " " + year);
 
+		// gathering data for filling in table
 		int startDay = cal.get(Calendar.DAY_OF_WEEK);
 		int numberOfDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 		int weeks = cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
 
+		// initiating the table for days of month
 		model.setRowCount(0);
 		model.setRowCount(weeks);
 
+		// filling in the dates of month
 		int i = startDay - 1;
 		for (int day = 1; day <= numberOfDays; day++) {
 			model.setValueAt(day, i / 7, i % 7);
@@ -83,6 +128,10 @@ public class calendarmod extends JFrame {
 		}
 
 	}
+
+	/*
+	 * void getActivityData() { model.get }
+	 */
 
 	/**
 	 * Launch the application.
