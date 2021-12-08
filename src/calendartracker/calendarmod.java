@@ -109,7 +109,7 @@ public class calendarmod extends JFrame {
 		// top banner for month & year
 		String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
 		int year = cal.get(Calendar.YEAR);
-		label.setText(month + " " + year);
+		tbanner.setText(month + " " + year);
 
 		// gathering data for filling in table
 		int startDay = cal.get(Calendar.DAY_OF_WEEK);
